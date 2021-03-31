@@ -32,10 +32,10 @@ def drawTable(size):
 	def joinRowsWithNewLine(target):
 		return("\n".join(target))
 	
-	labels = ["A", "B", "C", "D", "E"]
+	rowLabels = ["A", "B", "C", "D", "E"]
 	collection = []
 	for i in range(size):
-		addTopAndCentre(collection, size, labels[i])
+		addTopAndCentre(collection, size, rowLabels[i])
 	addBottomRow(collection, size)
 	
 	return(joinRowsWithNewLine(collection))
