@@ -10,8 +10,7 @@ def test():
 |   |   |
  --- ---
 |   |   |
- --- ---
-	"""
+ --- ---"""
 	assert( drawTable(1) == table11), "drawTable(1) produced "+drawTable(1)
 	assert( drawTable(2) == table22), "drawTable(2) produced "+drawTable(2)
 	
@@ -22,7 +21,12 @@ def drawDivider(size):
 	return(" ---"*size)
 
 def drawTable(size):
-	table = "\n".join((drawDivider(1), drawRow(1), drawDivider(1)))
+	collection = []
+	for i in range(size):
+		collection.append(drawDivider(size))
+		collection.append(drawRow(size))
+	collection.append(drawDivider(size))
+	table = "\n".join(collection)
 	return(table)
 
 test() 
