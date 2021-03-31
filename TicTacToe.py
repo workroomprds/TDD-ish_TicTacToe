@@ -61,15 +61,18 @@ def drawTable(size):
 	
 	return(joinRowsWithNewLine(collection))
 
-def drawFilledTable(size, content):
+def drawFilledTable(size, content=[]):
 	# refactor later
 	rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
 	headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-	drawRow = drawFilledRow
+	#drawRow = drawEmptyRow if (content is []) else drawFilledRow
 	collection = [makeHeaderRow(size, headerLabels)]
 	for i in range(size):
 		collection.append(drawDivider(size))
-		collection.append(drawRow(rowLabels[i], size, content[i]))
+		if (content == []):
+			collection.append(drawEmptyRow(rowLabels[i], size))
+		else:
+			collection.append(drawFilledRow(rowLabels[i], size, content[i]))
 	collection.append(drawDivider(size))
 	return(joinRowsWithNewLine(collection))
 
@@ -77,3 +80,4 @@ test()
 
 print(drawTable(9))
 print(drawFilledTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]))
+print(drawFilledTable(3))
