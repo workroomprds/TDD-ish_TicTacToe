@@ -21,12 +21,21 @@ def drawDivider(size):
 	return(" ---"*size)
 
 def drawTable(size):
-	collection = []
-	for i in range(size):
+	def addTopAndCentre(collection,size):
 		collection.append(drawDivider(size))
 		collection.append(drawRow(size))
-	collection.append(drawDivider(size))
-	table = "\n".join(collection)
-	return(table)
+	
+	def addBottomRow(collection, size):
+		collection.append(drawDivider(size))
+	
+	def joinRowsWithNewLine(collection):
+		return("\n".join(collection))
+	
+	collection = []
+	for i in range(size):
+		addTopAndCentre(collection, size)
+	
+	addBottomRow(collection, size)
+	return(joinRowsWithNewLine(collection))
 
 test() 
