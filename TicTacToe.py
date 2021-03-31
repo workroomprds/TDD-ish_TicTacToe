@@ -51,17 +51,13 @@ def joinRowsWithNewLine(target):
 	return("\n".join(target))
 
 def drawTable(size, content=[]):
-	# refactor later
 	rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
 	headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-	#drawRow = drawEmptyRow if (content is []) else drawFilledRow
 	collection = [makeHeaderRow(size, headerLabels)]
+	full = content !=[]
 	for i in range(size):
 		collection.append(drawDivider(size))
-		if (content == []):
-			collection.append(drawEmptyRow(rowLabels[i], size))
-		else:
-			collection.append(drawFilledRow(rowLabels[i], size, content[i]))
+		collection.append( drawFilledRow(rowLabels[i], size, content[i]) if (full) else drawEmptyRow(rowLabels[i], size) )
 	collection.append(drawDivider(size))
 	return(joinRowsWithNewLine(collection))
 
