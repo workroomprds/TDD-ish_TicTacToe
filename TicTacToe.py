@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
 
 def test():
-	assert( drawRow("A",3) == "A |   |   |   |"), "produced "+drawRow("A",3) 
+	assert( makeHeaderRow(2, ["1", "2"]) == "    1   2"), "produced "+ makeHeaderRow(2, ["1", "2"]) 
+	assert( drawRow("A",3) ==  "A |   |   |   |"), "produced "+drawRow("A",3) 
 	assert( drawDivider(3) == "   --- --- ---")
-	table11 = """   ---
+	table11 = """    1
+   ---
 A |   |
    ---"""
-	table22 = """   --- ---
+	table22 = """    1   2
+   --- ---
 A |   |   |
    --- ---
 B |   |   |
@@ -20,6 +23,9 @@ def drawRow(rowInfo, size):
 def drawDivider(size):
 	return("  "+" ---"*size)
 
+def makeHeaderRow(numberOfColumns, contents):
+	return("    "+"   ".join(contents[0:numberOfColumns]))
+
 def drawTable(size):
 	# note - no tests for these
 	def addTopAndCentre(target,numberOfColumns, rowLabel):
@@ -28,12 +34,13 @@ def drawTable(size):
 	
 	def addBottomRow(target, numberOfColumns):
 		target.append(drawDivider(numberOfColumns))
-	
+		
 	def joinRowsWithNewLine(target):
 		return("\n".join(target))
 	
-	rowLabels = ["A", "B", "C", "D", "E"]
-	collection = []
+	rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+	headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+	collection = [makeHeaderRow(size, headerLabels)]
 	for i in range(size):
 		addTopAndCentre(collection, size, rowLabels[i])
 	addBottomRow(collection, size)
@@ -42,4 +49,4 @@ def drawTable(size):
 
 test() 
 
-print(drawTable(5))
+print(drawTable(9))
