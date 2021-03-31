@@ -65,10 +65,11 @@ def drawFilledTable(size, content):
 	# refactor later
 	rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
 	headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+	drawRow = drawFilledRow
 	collection = [makeHeaderRow(size, headerLabels)]
 	for i in range(size):
 		collection.append(drawDivider(size))
-		collection.append(drawFilledRow(rowLabels[i], size, content[i]))
+		collection.append(drawRow(rowLabels[i], size, content[i]))
 	collection.append(drawDivider(size))
 	return(joinRowsWithNewLine(collection))
 
