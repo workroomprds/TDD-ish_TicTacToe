@@ -19,9 +19,16 @@ B |   |   |
 	
 	assert( joinRowsWithNewLine(["A", "b"]) == """A
 b""")
+	assert (drawFilledRow("A", 2, ["X", "O"]) =="A | X | O |")
 	
 def drawEmptyRow(rowInfo, size):
 	return(rowInfo+" "+"|   "*size+"|")
+
+def drawFilledRow(rowInfo, size, content):
+	collection = [rowInfo+" "+"|"]
+	for i in range(size):
+		collection.append(" "+content[i]+" |")
+	return("".join(collection))
 
 def drawDivider(size):
 	return("  "+" ---"*size)
