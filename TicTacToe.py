@@ -5,9 +5,9 @@ def test():
 	assert( drawDivider(2) == " --- ---")
 	
 def drawRow(size):
-	return("")
+	return("|   "*size+"|")
 
 def drawDivider(size):
-	return("")
+	return(" ---"*size)
 
 test() 
