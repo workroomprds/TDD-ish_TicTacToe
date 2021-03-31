@@ -17,6 +17,9 @@ B |   |   |
 	assert( drawTable(1) == table11), "drawTable(1) produced "+drawTable(1)
 	assert( drawTable(2) == table22), "drawTable(2) produced "+drawTable(2)
 	
+	assert( joinRowsWithNewLine(["A", "b"]) == """A
+b""")
+	
 def drawRow(rowInfo, size):
 	return(rowInfo+" "+"|   "*size+"|")
 
@@ -26,24 +29,19 @@ def drawDivider(size):
 def makeHeaderRow(numberOfColumns, contents):
 	return("    "+"   ".join(contents[0:numberOfColumns]))
 
+def joinRowsWithNewLine(target):
+	return("\n".join(target))
+
 def drawTable(size):
 	# note - no tests for these
-	def addTopAndCentre(target,numberOfColumns, rowLabel):
-		target.append(drawDivider(numberOfColumns))
-		target.append(drawRow(rowLabel,numberOfColumns))
-	
-	def addBottomRow(target, numberOfColumns):
-		target.append(drawDivider(numberOfColumns))
-		
-	def joinRowsWithNewLine(target):
-		return("\n".join(target))
 	
 	rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
 	headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 	collection = [makeHeaderRow(size, headerLabels)]
 	for i in range(size):
-		addTopAndCentre(collection, size, rowLabels[i])
-	addBottomRow(collection, size)
+		collection.append(drawDivider(size))
+		collection.append(drawRow(rowLabels[i], size))
+	collection.append(drawDivider(size))
 	
 	return(joinRowsWithNewLine(collection))
 
