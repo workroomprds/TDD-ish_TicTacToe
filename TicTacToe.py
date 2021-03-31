@@ -6,7 +6,14 @@ def test():
 	table11 = """ ---
 |   |
  ---"""
-	assert( drawTable(1) == table11), "produced "+drawTable(1)
+	table22 = """ --- --- 
+|   |   |
+ --- ---
+|   |   |
+ --- ---
+	"""
+	assert( drawTable(1) == table11), "drawTable(1) produced "+drawTable(1)
+	assert( drawTable(2) == table22), "drawTable(2) produced "+drawTable(2)
 	
 def drawRow(size):
 	return("|   "*size+"|")
