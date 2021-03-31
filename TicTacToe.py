@@ -2,7 +2,7 @@
 
 def test():
 	assert( makeHeaderRow(2, ["1", "2"]) == "    1   2"), "produced "+ makeHeaderRow(2, ["1", "2"]) 
-	assert( drawRow("A",3) ==  "A |   |   |   |"), "produced "+drawRow("A",3) 
+	assert( drawEmptyRow("A",3) ==  "A |   |   |   |"), "produced "+drawRow("A",3) 
 	assert( drawDivider(3) == "   --- --- ---")
 	table11 = """    1
    ---
@@ -20,7 +20,7 @@ B |   |   |
 	assert( joinRowsWithNewLine(["A", "b"]) == """A
 b""")
 	
-def drawRow(rowInfo, size):
+def drawEmptyRow(rowInfo, size):
 	return(rowInfo+" "+"|   "*size+"|")
 
 def drawDivider(size):
@@ -40,7 +40,7 @@ def drawTable(size):
 	collection = [makeHeaderRow(size, headerLabels)]
 	for i in range(size):
 		collection.append(drawDivider(size))
-		collection.append(drawRow(rowLabels[i], size))
+		collection.append(drawEmptyRow(rowLabels[i], size))
 	collection.append(drawDivider(size))
 	
 	return(joinRowsWithNewLine(collection))
