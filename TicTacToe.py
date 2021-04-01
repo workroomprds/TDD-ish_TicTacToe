@@ -56,11 +56,11 @@ Y |   |   |
 	assert ( testTableMaker.drawTable(2) == emptyTableDiffHeaders22) # done as 'approval test'
 
 def test_Winner():
-	xWinsH3x3 = [["X", "X", "X"],["O", " ", "X"],["X", "O", " "]]
-	xWinsV3x3 = [["X", "O", "X"],["X", " ", "X"],["X", "O", " "]]
-	xWinsD3x3 = [["X", "O", "X"],["O", "X", "O"],["X", "O", "X"]]
-	oWinsV3x3 = [["X", "O", "X"],["X", "O", "O"],["O", "O", "X"]]
-	noWin3x3  = [["X", "O", "X"],["X", "O", "O"],["O", "X", "O"]]
+	xWinsH3x3 = [["X", "X", "X"],["O", " ", "X"],["X", "O", " "]] #Horzontal
+	xWinsV3x3 = [["X", "O", "X"],["X", " ", "X"],["X", "O", " "]] #Vertical
+	xWinsD3x3 = [["X", "O", "X"],["O", "X", "O"],["X", "O", "X"]] #Diagonal
+	oWinsV3x3 = [["X", "O", "X"],["X", "O", "O"],["O", "O", "X"]] #O wins
+	noWin3x3  = [["X", "O", "X"],["X", "O", "O"],["O", "X", "O"]] #no winner
 	
 	assert (getItem(0, 0, xWinsH3x3) == "X")
 	assert (getItem(0, 1, xWinsH3x3) == "O")
@@ -121,6 +121,7 @@ def whoWins(board):
 			if ((item == getItem(columnNumber+1, rowNumber+1, board)) and (item == getItem(columnNumber+2, rowNumber+2, board)) and (item != "")):
 				return(item)
 	return("")
+#what about an unfinished board?
 
 def announceWinner(winner):
 	return(winner+" wins!" if (winner!="") else "Draw")
