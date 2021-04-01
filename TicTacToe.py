@@ -58,17 +58,17 @@ def joinRowsWithNewLine(target):
 	return("\n".join(target))
 
 class TableMaker():
+	
 	def __init__(self):
-		myHeaders = ""
+		self.rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
+		self.headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
 		
 	def drawTable(self, size, content=[]):
 		def drawRow(): #untested - depends on plenty from inside fn
-			return(drawFilledRow(rowLabels[i], size, content[i]) if (full) else drawEmptyRow(rowLabels[i], size) )
-		rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
-		headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+			return(drawFilledRow(self.rowLabels[i], size, content[i]) if (full) else drawEmptyRow(self.rowLabels[i], size) )
 		full = content !=[]
 		myDivider = drawDivider(size)
-		myColumnLabels = makeHeaderRow(size, headerLabels)
+		myColumnLabels = makeHeaderRow(size, self.headerLabels)
 		
 		collection = []
 		collection.append(myColumnLabels)
