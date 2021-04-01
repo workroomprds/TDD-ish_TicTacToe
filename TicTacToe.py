@@ -37,14 +37,19 @@ C | O | O | X |
 	
 	assert ( drawTable(3, dataForFilledTable33) == filledTable33) # done as 'approval test'
 	
-	filledTableDiffHeaders22 = """    !   ?
+	assert ( testTableMaker.buildTable("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
+	
+	specialisedLabels = {"rowLabels":["X", "Y"], "headerLabels":["!","?"]}
+	emptyTableDiffHeaders22 = """    !   ?
    --- ---
 X |   |   |
    --- ---
 Y |   |   |
    --- ---"""
-	testTableMaker = TableMaker({"rowLabels":["X", "Y"], "headerLabels":["!","?"]})
-	assert ( testTableMaker.drawTable(2) == filledTableDiffHeaders22) # done as 'approval test'
+	testTableMaker = TableMaker(specialisedLabels)
+	assert ( testTableMaker.drawTable(2) == emptyTableDiffHeaders22) # done as 'approval test'
+	
+	
 	
 #--- end of test
 #--- functions
@@ -71,20 +76,24 @@ class TableMaker():
 	def __init__(self,  parm = { "headerLabels":["1", "2", "3", "4", "5", "6", "7", "8", "9"], "rowLabels": ["A", "B", "C", "D", "E", "F", "G", "H", "I"]}):
 		self.rowLabels =    parm["rowLabels"]
 		self.headerLabels = parm["headerLabels"]
-		
+
+	def buildTable(self, headerLabels, divider, rows):
+		collection = []
+		collection.append( headerLabels )
+		collection.append( divider )
+		for row in rows:
+			collection.append( row )
+			collection.append( divider )
+		return(collection)
+	
 	def drawTable(self, size, content=[]):
-		def drawRow(): #untested - depends on plenty from inside fn
-			return(drawFilledRow(self.rowLabels[i], size, content[i]) if (full) else drawEmptyRow(self.rowLabels[i], size) )
+		def drawRow(rowNumber): #untested - depends on plenty from inside fn
+			return(drawFilledRow(self.rowLabels[rowNumber], size, content[rowNumber]) if (full) else drawEmptyRow(self.rowLabels[rowNumber], size) )
 		full = content !=[]
 		myDivider = drawDivider(size)
 		myColumnLabels = makeHeaderRow(size, self.headerLabels)
-		
-		collection = []
-		collection.append(myColumnLabels)
-		collection.append( myDivider )
-		for i in range(size):
-			collection.append( drawRow() )
-			collection.append( myDivider )
+		rows = list(map(drawRow, range(size)))
+		collection = self.buildTable(myColumnLabels, myDivider, rows)
 		return(joinRowsWithNewLine(collection))
 	
 
