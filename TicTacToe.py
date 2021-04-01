@@ -21,7 +21,8 @@ B |   |   |
 b""")
 	assert (drawFilledRow("A", 2, ["X", "O"]) =="A | X | O |")
 	
-	filledTable = """    1   2   3
+	dataForFilledTable33 = [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]
+	filledTable33 = """    1   2   3
    --- --- ---
 A | X | O |   |
    --- --- ---
@@ -30,8 +31,10 @@ B | X | X | O |
 C | O | O | X |
    --- --- ---"""
 	
-	assert ( drawTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]) == filledTable) # done as 'approval test'
+	assert ( drawTable(3, dataForFilledTable33) == filledTable33) # done as 'approval test'
 	
+#--- end of test
+#--- functions
 def drawEmptyRow(rowInfo, size):
 	return(rowInfo+" "+"|   "*size+"|")
 
@@ -51,14 +54,20 @@ def joinRowsWithNewLine(target):
 	return("\n".join(target))
 
 def drawTable(size, content=[]):
+	def drawRow(): #untested - depends on plenty from inside fn
+		return(drawFilledRow(rowLabels[i], size, content[i]) if (full) else drawEmptyRow(rowLabels[i], size) )
 	rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
 	headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
-	collection = [makeHeaderRow(size, headerLabels)]
 	full = content !=[]
+	myDivider = drawDivider(size)
+	myColumnLabels = makeHeaderRow(size, headerLabels)
+	
+	collection = []
+	collection.append(myColumnLabels)
+	collection.append( myDivider )
 	for i in range(size):
-		collection.append(drawDivider(size))
-		collection.append( drawFilledRow(rowLabels[i], size, content[i]) if (full) else drawEmptyRow(rowLabels[i], size) )
-	collection.append(drawDivider(size))
+		collection.append( drawRow() )
+		collection.append( myDivider )
 	return(joinRowsWithNewLine(collection))
 
 test() 
