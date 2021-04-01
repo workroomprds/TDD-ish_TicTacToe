@@ -59,11 +59,20 @@ def test_Winner():
 	xWinsH3x3 = [["X", "X", "X"],["O", " ", "X"],["X", "O", " "]]
 	xWinsV3x3 = [["X", "O", "X"],["X", " ", "X"],["X", "O", " "]]
 	xWinsD3x3 = [["X", "O", "X"],["O", "X", "O"],["X", "O", "X"]]
+	oWinsV3x3 = [["X", "O", "X"],["X", "O", "O"],["O", "O", "X"]]
+	noWin3x3  = [["X", "O", "X"],["X", "O", "O"],["O", "X", "O"]]
 	
 	assert (getItem(0, 0, xWinsH3x3) == "X")
 	assert (getItem(0, 1, xWinsH3x3) == "O")
 	assert (getItem(3, 3, xWinsH3x3) == "")
-	#assert (whoWins(xWinsH3x3) == "X")
+	assert (whoWins(xWinsH3x3) == "X")
+	assert (whoWins(xWinsV3x3) == "X")
+	assert (whoWins(xWinsD3x3) == "X")
+	assert (whoWins(oWinsV3x3) == "O")
+	assert (whoWins(noWin3x3) == "")
+	assert (announceWinner("Q") == "Q wins!")
+	assert (announceWinner("") == "Draw")
+	
 	
 	
 #--- end of test
@@ -102,11 +111,19 @@ def getItem(x,y,board):
 		item = ""
 	return(item)
 
-#def whoWins(board):
-	#for rowNumber, row in enumerate(board):
-	#	for columnNumberm, item in enumerate(row):
-			#if item
-	#return("O")
+def whoWins(board):
+	for rowNumber, row in enumerate(board):
+		for columnNumber, item in enumerate(row):
+			if ((item == getItem(columnNumber+1, rowNumber, board)) and (item == getItem(columnNumber+2, rowNumber, board)) and (item != "")):
+				return(item)
+			if ((item == getItem(columnNumber, rowNumber+1, board)) and (item == getItem(columnNumber, rowNumber+2, board)) and (item != "")):
+				return(item)
+			if ((item == getItem(columnNumber+1, rowNumber+1, board)) and (item == getItem(columnNumber+2, rowNumber+2, board)) and (item != "")):
+				return(item)
+	return("")
+
+def announceWinner(winner):
+	return(winner+" wins!" if (winner!="") else "Draw")
 
 class TableMaker():
 	
@@ -134,6 +151,9 @@ test_Winner()
 ## Examples
 myTableMaker = TableMaker()
 drawTable = myTableMaker.drawTable
-print(drawTable(9))
-print(drawTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]))
-print(drawTable(3))
+#print(drawTable(9))
+#print(drawTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]))
+#print(drawTable(3))
+board = [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]
+print(drawTable(3,board))
+print(announceWinner(whoWins(board)))
