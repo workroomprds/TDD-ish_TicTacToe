@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
+defaultTableHeaders = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] #single chars onle
+defaultRowLabels = ["A", "B", "C", "D", "E", "F", "G", "H", "I"] #single chars only
 
 def test():
 	
+	# test routines to draw header, divider, empty and filled row, building tabls as a list, joining list with newline
 	assert( makeHeaderRow(2, ["1", "2"]) == "    1   2"), "produced "+ makeHeaderRow(2, ["1", "2"]) 
 	assert( drawEmptyRow("A",3) ==  "A |   |   |   |"), "produced "+drawRow("A",3) 
 	assert( drawDivider(3) == "   --- --- ---")
+	assert (drawFilledRow("A", 2, ["X", "O"]) =="A | X | O |")
+	assert ( buildRowsIntoTable("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
+	assert( joinRowsWithNewLine(["A", "b"]) == """A
+b""")
+	
+	
+	
+	# test table production - basic, 2x2, 3x3 filled, specialised labels
+	# all table tests that expect default headers need to aling with defaults
 	table11 = """    1
    ---
 A |   |
@@ -15,16 +27,7 @@ A |   |   |
    --- ---
 B |   |   |
    --- ---"""
-	testTableMaker = TableMaker()
-	drawTable = testTableMaker.drawTable
-	
-	assert( drawTable(1) == table11), "drawTable(1) produced "+drawTable(1)
-	assert( drawTable(2) == table22), "drawTable(2) produced "+drawTable(2)
-	
-	assert( joinRowsWithNewLine(["A", "b"]) == """A
-b""")
-	assert (drawFilledRow("A", 2, ["X", "O"]) =="A | X | O |")
-	
+
 	dataForFilledTable33 = [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]
 	filledTable33 = """    1   2   3
    --- --- ---
@@ -35,9 +38,12 @@ B | X | X | O |
 C | O | O | X |
    --- --- ---"""
 	
-	assert ( drawTable(3, dataForFilledTable33) == filledTable33) # done as 'approval test'
+	testTableMaker = TableMaker()
+	drawTable = testTableMaker.drawTable
 	
-	assert ( buildRowsIntoTable("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
+	assert( drawTable(1) == table11), "drawTable(1) produced "+drawTable(1)
+	assert( drawTable(2) == table22), "drawTable(2) produced "+drawTable(2)
+	assert ( drawTable(3, dataForFilledTable33) == filledTable33) # done as 'approval test'
 	
 	specialisedLabels = {"rowLabels":["X", "Y"], "headerLabels":["!","?"]}
 	emptyTableDiffHeaders22 = """    !   ?
@@ -84,7 +90,7 @@ def buildRowsIntoTable(headerLabels, divider, rows):
 
 class TableMaker():
 	
-	def __init__(self,  parm = { "headerLabels":["1", "2", "3", "4", "5", "6", "7", "8", "9"], "rowLabels": ["A", "B", "C", "D", "E", "F", "G", "H", "I"]}):
+	def __init__(self,  parm = { "headerLabels":defaultTableHeaders, "rowLabels": defaultRowLabels}):
 		self.rowLabels =    parm["rowLabels"]
 		self.headerLabels = parm["headerLabels"]
 
@@ -96,16 +102,15 @@ class TableMaker():
 			def drawRow(rowNumber):
 				return( drawEmptyRow(self.rowLabels[rowNumber], size) )
 						
-		myDivider = drawDivider(size)
-		myColumnLabels = makeHeaderRow(size, self.headerLabels)
-		rows = list(map(drawRow, range(size)))
+		myDivider = drawDivider(size) # one of these
+		myColumnLabels = makeHeaderRow(size, self.headerLabels) # one of these
+		rows = list(map(drawRow, range(size))) ## a list with as many rows as needed
 		
 		return(joinRowsWithNewLine(buildRowsIntoTable(myColumnLabels, myDivider, rows)))
 	
-
-
 test() 
 
+## Examples
 myTableMaker = TableMaker()
 drawTable = myTableMaker.drawTable
 print(drawTable(9))
