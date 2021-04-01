@@ -88,12 +88,14 @@ class TableMaker():
 		self.rowLabels =    parm["rowLabels"]
 		self.headerLabels = parm["headerLabels"]
 
-	def drawTable(self, size, content=[]):
-		def drawRow(rowNumber): #untested - depends on plenty from inside fn
-			return(drawFilledRow(self.rowLabels[rowNumber], size, content[rowNumber]) if (full) else drawEmptyRow(self.rowLabels[rowNumber], size) )
-		
-		full = content !=[]
-		
+	def drawTable(self, size, content=[]):		
+		if (content !=[]):
+			def drawRow(rowNumber):
+				return(drawFilledRow(self.rowLabels[rowNumber], size, content[rowNumber]))
+		else:
+			def drawRow(rowNumber):
+				return( drawEmptyRow(self.rowLabels[rowNumber], size) )
+						
 		myDivider = drawDivider(size)
 		myColumnLabels = makeHeaderRow(size, self.headerLabels)
 		rows = list(map(drawRow, range(size)))
