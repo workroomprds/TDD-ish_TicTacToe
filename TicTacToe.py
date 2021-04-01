@@ -9,7 +9,7 @@ def test():
 	assert( drawEmptyRow("A",3) ==  "A |   |   |   |"), "produced "+drawRow("A",3) 
 	assert( drawDivider(3) == "   --- --- ---")
 	assert (drawFilledRow("A", 2, ["X", "O"]) =="A | X | O |")
-	assert ( buildRowsIntoTable("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
+	assert ( buildRowsIntoList("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
 	assert( joinRowsWithNewLine(["A", "b"]) == """A
 b""")
 	
@@ -54,7 +54,16 @@ Y |   |   |
    --- ---"""
 	testTableMaker = TableMaker(specialisedLabels)
 	assert ( testTableMaker.drawTable(2) == emptyTableDiffHeaders22) # done as 'approval test'
+
+def test_Winner():
+	xWinsH3x3 = [["X", "X", "X"],["O", " ", "X"],["X", "O", " "]]
+	xWinsV3x3 = [["X", "O", "X"],["X", " ", "X"],["X", "O", " "]]
+	xWinsD3x3 = [["X", "O", "X"],["O", "X", "O"],["X", "O", "X"]]
 	
+	assert (getItem(0, 0, xWinsH3x3) == "X")
+	assert (getItem(0, 1, xWinsH3x3) == "O")
+	assert (getItem(3, 3, xWinsH3x3) == "")
+	#assert (whoWins(xWinsH3x3) == "X")
 	
 	
 #--- end of test
@@ -77,7 +86,7 @@ def makeHeaderRow(numberOfColumns, contents):
 def joinRowsWithNewLine(target):
 	return("\n".join(target))
 
-def buildRowsIntoTable(headerLabels, divider, rows):
+def buildRowsIntoList(headerLabels, divider, rows):
 	collection = []
 	collection.append( headerLabels )
 	collection.append( divider )
@@ -86,7 +95,18 @@ def buildRowsIntoTable(headerLabels, divider, rows):
 		collection.append( divider )
 	return(collection)
 
+def getItem(x,y,board):
+	try:
+		item = board[y][x]
+	except:
+		item = ""
+	return(item)
 
+#def whoWins(board):
+	#for rowNumber, row in enumerate(board):
+	#	for columnNumberm, item in enumerate(row):
+			#if item
+	#return("O")
 
 class TableMaker():
 	
@@ -106,9 +126,10 @@ class TableMaker():
 		myColumnLabels = makeHeaderRow(size, self.headerLabels) # one of these
 		rows = list(map(drawRow, range(size))) ## a list with as many rows as needed
 		
-		return(joinRowsWithNewLine(buildRowsIntoTable(myColumnLabels, myDivider, rows)))
+		return(joinRowsWithNewLine(buildRowsIntoList(myColumnLabels, myDivider, rows)))
 	
 test() 
+test_Winner()
 
 ## Examples
 myTableMaker = TableMaker()
