@@ -37,6 +37,15 @@ C | O | O | X |
 	
 	assert ( drawTable(3, dataForFilledTable33) == filledTable33) # done as 'approval test'
 	
+	filledTableDiffHeaders22 = """    !   ?
+   --- ---
+X |   |   |
+   --- ---
+Y |   |   |
+   --- ---"""
+	testTableMaker = TableMaker({"rowLabels":["X", "Y"], "headerLabels":["!","?"]})
+	assert ( testTableMaker.drawTable(2) == filledTableDiffHeaders22) # done as 'approval test'
+	
 #--- end of test
 #--- functions
 def drawEmptyRow(rowInfo, size):
@@ -59,9 +68,9 @@ def joinRowsWithNewLine(target):
 
 class TableMaker():
 	
-	def __init__(self):
-		self.rowLabels =    ["A", "B", "C", "D", "E", "F", "G", "H", "I"]
-		self.headerLabels = ["1", "2", "3", "4", "5", "6", "7", "8", "9"]
+	def __init__(self,  parm = { "headerLabels":["1", "2", "3", "4", "5", "6", "7", "8", "9"], "rowLabels": ["A", "B", "C", "D", "E", "F", "G", "H", "I"]}):
+		self.rowLabels =    parm["rowLabels"]
+		self.headerLabels = parm["headerLabels"]
 		
 	def drawTable(self, size, content=[]):
 		def drawRow(): #untested - depends on plenty from inside fn
@@ -83,6 +92,7 @@ class TableMaker():
 test() 
 
 myTableMaker = TableMaker()
-print(myTableMaker.drawTable(9))
-#print(drawTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]))
-#print(drawTable(3))
+drawTable = myTableMaker.drawTable
+print(drawTable(9))
+print(drawTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]))
+print(drawTable(3))
