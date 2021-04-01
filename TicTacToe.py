@@ -37,7 +37,7 @@ C | O | O | X |
 	
 	assert ( drawTable(3, dataForFilledTable33) == filledTable33) # done as 'approval test'
 	
-	assert ( testTableMaker.buildTable("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
+	assert ( buildTable("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
 	
 	specialisedLabels = {"rowLabels":["X", "Y"], "headerLabels":["!","?"]}
 	emptyTableDiffHeaders22 = """    !   ?
@@ -71,21 +71,23 @@ def makeHeaderRow(numberOfColumns, contents):
 def joinRowsWithNewLine(target):
 	return("\n".join(target))
 
+def buildTable(headerLabels, divider, rows):
+	collection = []
+	collection.append( headerLabels )
+	collection.append( divider )
+	for row in rows:
+		collection.append( row )
+		collection.append( divider )
+	return(collection)
+
+
+
 class TableMaker():
 	
 	def __init__(self,  parm = { "headerLabels":["1", "2", "3", "4", "5", "6", "7", "8", "9"], "rowLabels": ["A", "B", "C", "D", "E", "F", "G", "H", "I"]}):
 		self.rowLabels =    parm["rowLabels"]
 		self.headerLabels = parm["headerLabels"]
 
-	def buildTable(self, headerLabels, divider, rows):
-		collection = []
-		collection.append( headerLabels )
-		collection.append( divider )
-		for row in rows:
-			collection.append( row )
-			collection.append( divider )
-		return(collection)
-	
 	def drawTable(self, size, content=[]):
 		def drawRow(rowNumber): #untested - depends on plenty from inside fn
 			return(drawFilledRow(self.rowLabels[rowNumber], size, content[rowNumber]) if (full) else drawEmptyRow(self.rowLabels[rowNumber], size) )
@@ -93,7 +95,7 @@ class TableMaker():
 		myDivider = drawDivider(size)
 		myColumnLabels = makeHeaderRow(size, self.headerLabels)
 		rows = list(map(drawRow, range(size)))
-		collection = self.buildTable(myColumnLabels, myDivider, rows)
+		collection = buildTable(myColumnLabels, myDivider, rows)
 		return(joinRowsWithNewLine(collection))
 	
 
