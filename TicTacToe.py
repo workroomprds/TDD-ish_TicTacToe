@@ -2,76 +2,29 @@
 	
 from TableMaker import TableMaker
 from BoardAnalyser import BoardAnalyser
-
-	
-#--- end of test
-#--- functions
-
-
+from Board import Board
+import utils
+import ui
 	
 	
-def announceWinner(winner):
-	return(winner+" wins!" if (winner!="Draw") else "Draw")
 
+def switchPlayer(player):
+	return( "X" if player == "Y" else "Y")
 
-def test_Winner():
-	assert (announceWinner("Q") == "Q wins!")
-	assert (announceWinner("Draw") == "Draw")
-	
-class Board():
-	def __init__(self,size):
-		self.board = self.empty_board(size)
-		
-	def empty_board(self,size):
-		board = []
-		for i in range(0,size):
-			row = []
-			for j in range(0,size):
-				row.append(" ")
-			board.append(row)
-		return(board)
-	
-	def make_change(self, x, y, content, surface):
-		"""Makes a change to the board, based on labels given - no validation of input, not of board capacity, nor of content"""
-		self.board[surface.headerLabels.index(y)][surface.rowLabels.index(x)] = content
-
-
-def test_Board():
-	this_game = Board(3)
-	show_table = TableMaker(3)
-	analyst = BoardAnalyser()
-	
-	boardWithXin11 = """    1   2   3
-   --- --- ---
-A | X |   |   |
-   --- --- ---
-B |   |   |   |
-   --- --- ---
-C |   |   |   |
-   --- --- ---"""
-	
-	assert(this_game.board == [[" ", " ", " "], [" ", " ", " "], [" ", " ", " "]])
-	
-	this_game.make_change("A", "1", "X", show_table)
-	assert(show_table.drawTable(this_game.board) == boardWithXin11)
-	this_game.make_change("B", "2", "X", show_table)
-	this_game.make_change("C", "3", "X", show_table)
-	assert(analyst.available_postitions(this_game.board, show_table) == ['A2', 'A3', 'B1', 'B3', 'C1', 'C2'])
-	assert(analyst.whoWins(this_game.board) == "X")
-	
-
-test_Board()
-#board = [["", "", ""], ["", "", ""], ["", "", ""]]
-
-## Examples
+board = Board(3)
 game_surface = TableMaker(3)
 analyser = BoardAnalyser()
-board = [["X", "O", " "], ["X", "X", "O"], ["O", " ", "X"]]
-#print(analyser.available_postitions(board, game_surface))
-#print(game_surface.drawTable(board))
-#print(announceWinner(analyser.whoWins(board)))
+player = "X"
+while analyser.whoWins(board.board) == "Still to play":
+	ui.output(game_surface.drawTable(board.board))
+	move = ui.request_valid_input(player, analyser.available_postitions(board.board, game_surface), ui.askForInput)
+	row = move[0] ## y axis
+	col = move[1] ## x axis
+	board.make_change(row, col, player, game_surface)
+	player = switchPlayer(player)
 
+ui.output(game_surface.drawTable(board.board))
+ui.output("---------")
+ui.output("That's it - game over!")
+ui.output(announceWinner(analyser.whoWins(board.board)))#
 
-#print(drawTable(9))
-#print(drawTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]))
-#print(drawTable(3))
