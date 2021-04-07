@@ -2,7 +2,7 @@
 	
 from TableMaker import TableMaker
 from BoardAnalyser import BoardAnalyser
-from Board import Board
+from Game import Board
 import utils
 import ui
 	

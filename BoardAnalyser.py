@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from TableMaker import TableMaker
-from Board import Board
+from Game import Board
 
 
 class BoardAnalyser():
