@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 from TableMaker import TableMaker
+from Board import Board
 
 
 class BoardAnalyser():
 	"""Routines to decide winner, see avilable postions etc."""
-	def __init__(self):
-		pass
+	def __init__(self, still_to_play_message="Still to play", draw_message="Draw"):
+		self.still_to_play_message = still_to_play_message
+		self.draw_message = draw_message
 		
 	def getItem(self, x, y, board):
 		try:
@@ -21,15 +23,15 @@ class BoardAnalyser():
 	def unplayed(self, item):
 		return(item=="" or item==" ")
 	
-	def available_postitions(self, board, gameTable):
+	def available_postitions(self, game:Board)->list:
 		available=[]
-		for rowNumber, row in enumerate(board):
+		for rowNumber, row in enumerate(game.board):
 			for columnNumber, item in enumerate(row):
 				if self.unplayed(item):
-					available.append("".join([gameTable.rowLabels[rowNumber],gameTable.headerLabels[columnNumber]]))
+					available.append("".join([game.rowLabels[rowNumber],game.headerLabels[columnNumber]]))
 		return available		
 	
-	def whoWins(self, board):
+	def whoWins(self, board)->str:
 		still_to_play = False
 		getItem = self.getItem
 		for rowNumber, row in enumerate(board):
@@ -41,8 +43,10 @@ class BoardAnalyser():
 				matching_dia = self.matching_set([item, getItem(columnNumber+1, rowNumber+1, board), getItem(columnNumber+2, rowNumber+2, board)])
 				if not self.unplayed(item) and (matching_row or matching_col or matching_dia):
 					return(item) ## whether still_to_play, or not.
-		return "Still to play" if still_to_play else "Draw"	
+		return self.still_to_play_message if still_to_play else self.draw_message	
 	
+	def keep_going(self, board):
+		return ( self.whoWins(board) == self.still_to_play_message )
 	
 	
 def test_Analyser():
@@ -54,6 +58,7 @@ def test_Analyser():
 	noWin3x3  = [["X", "O", "X"],["X", "O", "O"],["O", "X", "O"]] #no winner
 	
 	b=BoardAnalyser()
+	game = Board(3, TableMaker)
 	
 	assert (b.getItem(0, 0, xWinsH3x3) == "X")
 	assert (b.getItem(0, 1, xWinsH3x3) == "O")
@@ -65,9 +70,9 @@ def test_Analyser():
 	assert (b.whoWins(noWin3x3) == "Draw")
 	assert (b.whoWins(stillToPlay3x3) == "Still to play")
 	
-	game_surface = TableMaker(3)
-	drawTable = game_surface.drawTable
-	board = [["X", "O", " "], ["X", "X", "O"], ["O", " ", "X"]]
-	assert(b.available_postitions(board, game_surface) == ["A3", "C2"])
+	game.update_whole_board([["X", "O", " "], ["X", "X", "O"], ["O", " ", "X"]])
+	assert(b.available_postitions(game) == ["A3", "C2"])
 
 test_Analyser()
+
+## GAME AND BOARD ARE SOOOO CONFUSED!
