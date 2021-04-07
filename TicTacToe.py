@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 	
-
+from TableMaker import TableMaker
 
 	
 #--- end of test
@@ -29,6 +29,25 @@ def whoWins(board):
 def announceWinner(winner):
 	return(winner+" wins!" if (winner!="") else "Draw")
 
+
+def test_Winner():
+	xWinsH3x3 = [["X", "X", "X"],["O", " ", "X"],["X", "O", " "]] #Horzontal
+	xWinsV3x3 = [["X", "O", "X"],["X", " ", "X"],["X", "O", " "]] #Vertical
+	xWinsD3x3 = [["X", "O", "X"],["O", "X", "O"],["X", "O", "X"]] #Diagonal
+	oWinsV3x3 = [["X", "O", "X"],["X", "O", "O"],["O", "O", "X"]] #O wins
+	noWin3x3  = [["X", "O", "X"],["X", "O", "O"],["O", "X", "O"]] #no winner
+	
+	assert (getItem(0, 0, xWinsH3x3) == "X")
+	assert (getItem(0, 1, xWinsH3x3) == "O")
+	assert (getItem(3, 3, xWinsH3x3) == "")
+	assert (whoWins(xWinsH3x3) == "X")
+	assert (whoWins(xWinsV3x3) == "X")
+	assert (whoWins(xWinsD3x3) == "X")
+	assert (whoWins(oWinsV3x3) == "O")
+	assert (whoWins(noWin3x3) == "")
+	assert (announceWinner("Q") == "Q wins!")
+	assert (announceWinner("") == "Draw")
+	
 
 
 test_Winner()
