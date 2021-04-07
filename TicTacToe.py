@@ -2,7 +2,7 @@
 	
 from TableMaker import TableMaker
 from BoardAnalyser import BoardAnalyser
-from Game import Board
+from Game import Game
 import utils
 import ui
 	
@@ -11,7 +11,7 @@ import ui
 def switchPlayer(player):
 	return( "X" if player == "Y" else "Y")
 
-game = Board(3, TableMaker)
+game = Game(3, TableMaker)
 analyser = BoardAnalyser()
 player = "X"
 

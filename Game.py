@@ -3,7 +3,7 @@
 from TableMaker import TableMaker
 #from BoardAnalyser import BoardAnalyser
 
-class Board():
+class Game():
 	def __init__(self,size, Surface):
 		self.board = self.empty_board(size)
 		self.surface = Surface(size)
@@ -30,8 +30,8 @@ class Board():
 		self.board = new_board
 	
 	
-def test_Board():
-	this_game = Board(3, TableMaker)
+def test_Game():
+	this_game = Game(3, TableMaker)
 	
 	boardWithXinB1 = """    1   2   3
    --- --- ---
@@ -52,7 +52,7 @@ C |   |   |   |
 	#assert(analyst.whoWins(this_game.board) == "X")
 	
 	
-test_Board()
+test_Game()
 
 
 ## For writing test-first python

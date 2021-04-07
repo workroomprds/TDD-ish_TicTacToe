@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from TableMaker import TableMaker
-from Game import Board
+from Game import Game
 
 
 class BoardAnalyser():
@@ -17,13 +17,13 @@ class BoardAnalyser():
 			item = ""
 		return(item)
 	
-	def matching_set(self, list_to_check):
+	def matching_set(self, list_to_check:list)->bool:
 		return(len(set(list_to_check)) == 1)
 	
-	def unplayed(self, item):
+	def unplayed(self, item:str)->bool:
 		return(item=="" or item==" ")
 	
-	def available_postitions(self, game:Board)->list:
+	def available_postitions(self, game:Game)->list:
 		available=[]
 		for rowNumber, row in enumerate(game.board):
 			for columnNumber, item in enumerate(row):
@@ -45,7 +45,7 @@ class BoardAnalyser():
 					return(item) ## whether still_to_play, or not.
 		return self.still_to_play_message if still_to_play else self.draw_message	
 	
-	def keep_going(self, board):
+	def keep_going(self, board)->bool:
 		return ( self.whoWins(board) == self.still_to_play_message )
 	
 	
@@ -58,7 +58,7 @@ def test_Analyser():
 	noWin3x3  = [["X", "O", "X"],["X", "O", "O"],["O", "X", "O"]] #no winner
 	
 	b=BoardAnalyser()
-	game = Board(3, TableMaker)
+	game = Game(3, TableMaker)
 	
 	assert (b.getItem(0, 0, xWinsH3x3) == "X")
 	assert (b.getItem(0, 1, xWinsH3x3) == "O")
