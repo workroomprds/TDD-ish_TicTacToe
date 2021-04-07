@@ -1,16 +1,17 @@
 #!/usr/bin/env python3
-defaultTableHeaders = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] #single chars onle
-defaultRowLabels = ["A", "B", "C", "D", "E", "F", "G", "H", "I"] #single chars only
+	
 
 def test():
 	
+	t = TableMaker(2)
+	
 	# test routines to draw header, divider, empty and filled row, building tabls as a list, joining list with newline
-	assert( makeHeaderRow(2, ["1", "2"]) == "    1   2"), "produced "+ makeHeaderRow(2, ["1", "2"]) 
-	assert( drawEmptyRow("A",3) ==  "A |   |   |   |"), "produced "+drawRow("A",3) 
-	assert( drawDivider(3) == "   --- --- ---")
-	assert (drawFilledRow("A", 2, ["X", "O"]) =="A | X | O |")
-	assert ( buildRowsIntoList("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
-	assert( joinRowsWithNewLine(["A", "b"]) == """A
+	assert( t.makeHeaderRow(2, ["1", "2"]) == "    1   2"), "produced "+ t.makeHeaderRow(2, ["1", "2"]) 
+	assert( t.drawEmptyRow("A",3) ==  "A |   |   |   |"), "produced "+t.drawRow("A",3) 
+	assert( t.drawDivider(3) == "   --- --- ---")
+	assert( t.drawFilledRow("A", 2, ["X", "O"]) =="A | X | O |")
+	assert( t.buildRowsIntoList("Labels", "Divider", ["Row1", "Row2"]) == ["Labels", "Divider", "Row1", "Divider", "Row2", "Divider"])
+	assert( t.joinRowsWithNewLine(["A", "b"]) == """A
 b""")
 	
 	
@@ -38,22 +39,25 @@ B | X | X | O |
 C | O | O | X |
    --- --- ---"""
 	
+	testTableMaker1 = TableMaker(1)
+	testTableMaker2 = TableMaker(2)
 	testTableMaker = TableMaker()
 	drawTable = testTableMaker.drawTable
 	
-	assert( drawTable(1) == table11), "drawTable(1) produced "+drawTable(1)
-	assert( drawTable(2) == table22), "drawTable(2) produced "+drawTable(2)
-	assert ( drawTable(3, dataForFilledTable33) == filledTable33) # done as 'approval test'
+	assert( testTableMaker1.drawTable() == table11)
+	assert( testTableMaker2.drawTable() == table22)
+	assert ( drawTable(dataForFilledTable33) == filledTable33) # done as 'approval test'
 	
-	specialisedLabels = {"rowLabels":["X", "Y"], "headerLabels":["!","?"]}
+	testTableMaker4 = TableMaker(size=2, rowLabels = ["X", "Y"], headerLabels=["!","?"] )
+	#specialisedLabels = {"rowLabels":["X", "Y"], "headerLabels":["!","?"]}
 	emptyTableDiffHeaders22 = """    !   ?
    --- ---
 X |   |   |
    --- ---
 Y |   |   |
    --- ---"""
-	testTableMaker = TableMaker(specialisedLabels)
-	assert ( testTableMaker.drawTable(2) == emptyTableDiffHeaders22) # done as 'approval test'
+	print(testTableMaker4.drawTable())
+	assert ( testTableMaker4.drawTable() == emptyTableDiffHeaders22) # done as 'approval test'
 
 def test_Winner():
 	xWinsH3x3 = [["X", "X", "X"],["O", " ", "X"],["X", "O", " "]] #Horzontal
@@ -77,32 +81,7 @@ def test_Winner():
 	
 #--- end of test
 #--- functions
-def drawEmptyRow(rowInfo, size):
-	return(rowInfo+" "+"|   "*size+"|")
 
-def drawFilledRow(rowInfo, size, content):
-	collection = [rowInfo+" "+"|"]
-	for i in range(size):
-		collection.append(" "+content[i]+" |")
-	return("".join(collection))
-
-def drawDivider(size):
-	return("  "+" ---"*size)
-
-def makeHeaderRow(numberOfColumns, contents):
-	return("    "+"   ".join(contents[0:numberOfColumns]))
-
-def joinRowsWithNewLine(target):
-	return("\n".join(target))
-
-def buildRowsIntoList(headerLabels, divider, rows):
-	collection = []
-	collection.append( headerLabels )
-	collection.append( divider )
-	for row in rows:
-		collection.append( row )
-		collection.append( divider )
-	return(collection)
 
 def getItem(x,y,board):
 	try:
@@ -127,34 +106,65 @@ def announceWinner(winner):
 	return(winner+" wins!" if (winner!="") else "Draw")
 
 class TableMaker():
+	defaultTableHeaders = ["1", "2", "3", "4", "5", "6", "7", "8", "9"] #single chars onle
+	defaultRowLabels = ["A", "B", "C", "D", "E", "F", "G", "H", "I"] #single chars only
 	
-	def __init__(self,  parm = { "headerLabels":defaultTableHeaders, "rowLabels": defaultRowLabels}):
-		self.rowLabels =    parm["rowLabels"]
-		self.headerLabels = parm["headerLabels"]
+	def __init__(self, size= 3, headerLabels=defaultTableHeaders, rowLabels=defaultRowLabels):
+		self.size =    size
+		self.rowLabels =    rowLabels
+		self.headerLabels = headerLabels
 
-	def drawTable(self, size, content=[]):		
+	def drawTable(self, content=[]):		
 		if (content !=[]):
 			def drawRow(rowNumber):
-				return(drawFilledRow(self.rowLabels[rowNumber], size, content[rowNumber]))
+				return(self.drawFilledRow(self.rowLabels[rowNumber], self.size, content[rowNumber]))
 		else:
 			def drawRow(rowNumber):
-				return( drawEmptyRow(self.rowLabels[rowNumber], size) )
+				return( self.drawEmptyRow(self.rowLabels[rowNumber], self.size) )
 						
-		myDivider = drawDivider(size) # one of these
-		myColumnLabels = makeHeaderRow(size, self.headerLabels) # one of these
-		rows = list(map(drawRow, range(size))) ## a list with as many rows as needed
+		myDivider = self.drawDivider(self.size) # one of these
+		myColumnLabels = self.makeHeaderRow(self.size, self.headerLabels) # one of these
+		rows = list(map(drawRow, range(self.size))) ## a list with as many rows as needed
 		
-		return(joinRowsWithNewLine(buildRowsIntoList(myColumnLabels, myDivider, rows)))
+		return(self.joinRowsWithNewLine(self.buildRowsIntoList(myColumnLabels, myDivider, rows)))
 	
+	def drawEmptyRow(self, rowInfo, size):
+		return(rowInfo+" "+"|   "*size+"|")
+	
+	def drawFilledRow(self, rowInfo, size, content):
+		collection = [rowInfo+" "+"|"]
+		for i in range(size):
+			collection.append(" "+content[i]+" |")
+		return("".join(collection))
+	
+	def drawDivider(self, size):
+		return("  "+" ---"*size)
+	
+	def makeHeaderRow(self, numberOfColumns, contents):
+		return("    "+"   ".join(contents[0:numberOfColumns]))
+	
+	def joinRowsWithNewLine(self, target):
+		return("\n".join(target))
+	
+	def buildRowsIntoList(self, headerLabels, divider, rows):
+		collection = []
+		collection.append( headerLabels )
+		collection.append( divider )
+		for row in rows:
+			collection.append( row )
+			collection.append( divider )
+		return(collection)
+
+
 test() 
 test_Winner()
 
 ## Examples
-myTableMaker = TableMaker()
-drawTable = myTableMaker.drawTable
+game_surface = TableMaker(3)
+drawTable = game_surface.drawTable
 #print(drawTable(9))
 #print(drawTable(3, [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]))
 #print(drawTable(3))
 board = [["X", "O", " "], ["X", "X", "O"], ["O", "O", "X"]]
-print(drawTable(3,board))
+print(drawTable(board))
 print(announceWinner(whoWins(board)))
