@@ -39,7 +39,7 @@ class BoardAnalyser():
 				matching_row = self.matching_set([item, getItem(columnNumber+1, rowNumber, board), getItem(columnNumber+2, rowNumber, board)])
 				matching_col = self.matching_set([item, getItem(columnNumber, rowNumber+1, board), getItem(columnNumber, rowNumber+2, board)])
 				matching_dia = self.matching_set([item, getItem(columnNumber+1, rowNumber+1, board), getItem(columnNumber+2, rowNumber+2, board)])
-				if (matching_row or matching_col or matching_dia):
+				if not self.unplayed(item) and (matching_row or matching_col or matching_dia):
 					return(item) ## whether still_to_play, or not.
 		return "Still to play" if still_to_play else "Draw"	
 	
