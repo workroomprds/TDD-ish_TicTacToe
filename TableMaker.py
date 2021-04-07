@@ -109,6 +109,4 @@ Y |   |   |
 	#print(testTableMaker4.drawTable())
 	assert ( testTableMaker4.drawTable() == emptyTableDiffHeaders22) # done as 'approval test'
 	
-	
-	
 test() 

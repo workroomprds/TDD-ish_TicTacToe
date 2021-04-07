@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
-from TableMaker import TableMaker
-#from BoardAnalyser import BoardAnalyser
-
 class Game():
-	def __init__(self,size, Surface):
+	def __init__(self, size, Surface):
 		self.board = self.empty_board(size)
 		self.surface = Surface(size)
 		self.rowLabels = self.surface.rowLabels
@@ -30,7 +27,9 @@ class Game():
 		self.board = new_board
 	
 	
-def test_Game():
+def test():
+	from TableMaker import TableMaker
+	
 	this_game = Game(3, TableMaker)
 	
 	boardWithXinB1 = """    1   2   3
@@ -46,13 +45,9 @@ C |   |   |   |
 	
 	this_game.make_change("B", "1", "X")
 	assert(this_game.draw_table() == boardWithXinB1)
-	#this_game.make_change("B", "2", "X")
-	#this_game.make_change("C", "3", "X")
-	#assert(analyst.available_postitions(this_game.board) == ['A2', 'A3', 'B1', 'B3', 'C1', 'C2'])
-	#assert(analyst.whoWins(this_game.board) == "X")
 	
+	this_game.update_whole_board([["A", "B", "C"], ["D", "E", "F"], ["G", "H", "I"]])
+	assert(this_game.board == [["A", "B", "C"], ["D", "E", "F"], ["G", "H", "I"]])
 	
-test_Game()
+test()
 
-
-## For writing test-first python
