@@ -22,16 +22,16 @@ class BoardAnalyser():
 		"""Returns true if list is all the same"""
 		return(len(set(list_to_check)) == 1)
 	
-	def unplayed(self, item:str)->bool:
-		"""Returns true if item is <emptystring> or <space>"""
-		return(item=="" or item==" ")
+	def cell_has_entry(self, item:str)->bool:
+		"""Returns true if item neither <emptystring> nor <space>"""
+		return(not(item=="" or item==" "))
 	
 	def available_postitions(self, game:Game)->list:
 		"""Returns all unplayed calls, referenced by board refs from Game"""
 		available=[]
 		for rowNumber, row in enumerate(game.board):
 			for columnNumber, item in enumerate(row):
-				if self.unplayed(item):
+				if not(self.cell_has_entry(item)):
 					available.append("".join([game.rowLabels[rowNumber],game.headerLabels[columnNumber]]))
 		return available		
 	
@@ -41,14 +41,15 @@ class BoardAnalyser():
 		getItem = self.getItem
 		for rowNumber, row in enumerate(board):
 			for columnNumber, item in enumerate(row):
-				if self.unplayed(item):
+				if self.cell_has_entry(item):
+					matching_row = self.matching_set([item, getItem(columnNumber+1, rowNumber, board), getItem(columnNumber+2, rowNumber, board)])
+					matching_col = self.matching_set([item, getItem(columnNumber, rowNumber+1, board), getItem(columnNumber, rowNumber+2, board)])
+					matching_dia = self.matching_set([item, getItem(columnNumber+1, rowNumber+1, board), getItem(columnNumber+2, rowNumber+2, board)])
+					matching_opp_dia = self.matching_set([item, getItem(columnNumber+1, rowNumber-1, board), getItem(columnNumber+2, rowNumber-2, board)])
+					if (matching_row or matching_col or matching_dia or matching_opp_dia):
+						return(item) ## whether still_to_play, or not.
+				else:
 					still_to_play = True
-				matching_row = self.matching_set([item, getItem(columnNumber+1, rowNumber, board), getItem(columnNumber+2, rowNumber, board)])
-				matching_col = self.matching_set([item, getItem(columnNumber, rowNumber+1, board), getItem(columnNumber, rowNumber+2, board)])
-				matching_dia = self.matching_set([item, getItem(columnNumber+1, rowNumber+1, board), getItem(columnNumber+2, rowNumber+2, board)])
-				matching_opp_dia = self.matching_set([item, getItem(columnNumber+1, rowNumber-1, board), getItem(columnNumber+2, rowNumber-2, board)])
-				if not self.unplayed(item) and (matching_row or matching_col or matching_dia or matching_opp_dia):
-					return(item) ## whether still_to_play, or not.
 		return self.still_to_play_message if still_to_play else self.draw_message
 	
 	def keep_going(self, board)->bool:
@@ -88,6 +89,9 @@ def test():
 	assert (b.keep_going(stillToPlay3x3) == True)
 	assert (b.keep_going(oWinsV3x3) == False)
 	assert (b.keep_going(noWin3x3) == False)
+	assert (b.cell_has_entry("A") == True)
+	assert (b.cell_has_entry(" ") == False)
+	assert (b.cell_has_entry("") == False)
 	
 	game.update_whole_board([["X", "O", " "], ["X", "X", "O"], ["O", " ", "X"]])
 	assert(b.available_postitions(game) == ["A3", "C2"])
