@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 class Game():
-	def __init__(self, size, Surface):
+	def __init__(self,size, Surface ):
 		self.board = self.empty_board(size)
 		self.surface = Surface(size)
 		self.rowLabels = self.surface.rowLabels

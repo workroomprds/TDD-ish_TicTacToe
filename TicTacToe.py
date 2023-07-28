@@ -7,10 +7,9 @@ from Player import Player
 import utils
 import ui
 	
-	
-	
-game = Game(3, TableMaker)
-analyser = BoardAnalyser()
+
+game = Game(size=8, Surface=TableMaker)
+analyser = BoardAnalyser(matching_size=3)
 player = Player(["X", "O"])
 
 while analyser.keep_going(game.board):
